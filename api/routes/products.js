@@ -7,9 +7,25 @@ const Product = require('./../models/product');
 
 router.get('/',(req, res, next) => {
   Product.find()
+    .select('name price _id')
     .exec()
     .then(docs => {
-      res.status(200).json(docs);
+      const response = {
+        count: docs.length,
+        products: docs.map( doc => {
+          return {
+            name: doc.name,
+            price: doc.price,
+            _id: doc._id,
+            request: {
+              type: 'GET',
+              url: 'localhost:3000/products/' + doc._id
+            }
+          }
+        })
+      };
+
+      res.status(200).json(response);
     })
     .catch(err => {
       console.log(err)
@@ -30,13 +46,17 @@ router.post('/',(req, res, next) => {
   .save()
   .then(result => {
     console.log(result);
+    res.status(201).json({
+      message: 'Successful POST request to /products',
+      createdProduct: product,
+      request: {
+        type: 'GET',
+        url: 'localhost:3000/products/' + result._id
+      }
+    });
   })
   .catch((err) => console.log(err));
   
-  res.status(201).json({
-    message: 'Successful POST request to /products',
-    createdProduct: product
-  });
 });
 
 router.get('/:productId',(req, res, next) => {
@@ -65,14 +85,12 @@ router.get('/:productId',(req, res, next) => {
 });
 
 router.patch('/:productId',(req, res, next) => {
-  console.log('AAAAAAAAAAAAAAAAAAA:  ', req.body);
   const id = req.params.productId;
   const updateOps = {};
 
   for (const ops of req.body) {
     updateOps[ops.propName] = ops.value;
   }
-  console.log('BBBBBBBBBBBBBBBBB:  ', updateOps);
 
   Product.update({
     _id: id
