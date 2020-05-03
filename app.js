@@ -8,20 +8,19 @@ const productsRoutes = require('./api/routes/products');
 const ordersRoutes = require('./api/routes/orders');
 
 mongoose.connect(
-  "mongodb+srv://cluster0-nzmnv.mongodb.net/test",
-  {
-    auth: {
-      user: 'admin',
-      password: 'admin123'
-    },
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
-).then(
-  (r) => {
-    console.log('Connected');
-  }
-);
+    "mongodb+srv://cluster0-nzmnv.mongodb.net/test",
+    {
+      auth: {
+        user: 'admin',
+        password: 'admin123'
+      },
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }
+  )
+  .then((r) => console.log('Connected'));
+
+mongoose.Promise = global.Promise;
 
 // Using morgan middleware to log requests
 app.use(morgan('dev'));
