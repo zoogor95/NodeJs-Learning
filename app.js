@@ -8,7 +8,7 @@ const productsRoutes = require('./api/routes/products');
 const ordersRoutes = require('./api/routes/orders');
 
 mongoose.connect(
-  "mongodb+srv://cluster0-d4yfv.mongodb.net/test",
+  "mongodb+srv://cluster0-nzmnv.mongodb.net/test",
   {
     auth: {
       user: 'admin',
@@ -43,6 +43,8 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'PUT,, POST, GET, PATCH, DELETE');
     return res.status(200).json({});
   }
+  
+  next();
 
 });
 
