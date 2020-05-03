@@ -2,9 +2,26 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const productsRoutes = require('./api/routes/products');
 const ordersRoutes = require('./api/routes/orders');
+
+mongoose.connect(
+  "mongodb+srv://cluster0-nzmnv.mongodb.net/test",
+  {
+    auth: {
+      user: 'admin',
+      password: 'admin123'
+    },
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+).then(
+  (r) => {
+    console.log('Connected');
+  }
+);
 
 // Using morgan middleware to log requests
 app.use(morgan('dev'));
@@ -26,6 +43,8 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'PUT,, POST, GET, PATCH, DELETE');
     return res.status(200).json({});
   }
+  
+  next();
 
 });
 
