@@ -25,6 +25,9 @@ mongoose.Promise = global.Promise;
 // Using morgan middleware to log requests
 app.use(morgan('dev'));
 
+//making uploads public folder
+app.use('/uploads', express.static('uploads'));
+
 //  parse url encoded simple data
 //  extended true would mean it will support rich data as well
 app.use(bodyParser.urlencoded({extended: false}));
